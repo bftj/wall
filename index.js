@@ -1,6 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var expressHbs = require('express3-handlebars');
+var expressHbs = require('express-handlebars');
 var socket = require('./socket.js').socket;
 var socket_send = require('./socket.js').send;
 var onConnection = require('./socket.js').onConnection;
