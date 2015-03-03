@@ -5,20 +5,42 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
-    <span id="message">{{ message }}</span>
+  <ul id="wall">
+  </ul>
 <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
 <script>
- var sock = new SockJS('http://localhost:1338/socket');
+ var hostname = window.location.hostname;
+ var sock = new SockJS('http://' + hostname + ':1338/socket');
+
  sock.onopen = function() {
      console.log('open');
  };
+
  sock.onmessage = function(e) {
      console.log('message', e.data);
-     document.getElementById('message').innerHTML = e.data;
+
+     try {
+       var messages = JSON.parse(e.data);
+       for (var i=0; i < messages.length; i++) {
+         printMessage(messages[i]);
+       }
+     } catch (exception) {
+       printMessage(e.data);
+     };
  };
+
  sock.onclose = function() {
      console.log('close');
  };
+
+ function printMessage(message) {
+     var li = document.createElement('li');
+     li.innerText = message;
+
+     var wall = document.getElementById('wall');
+     wall.appendChild(li);
+     wall.scrollTop = wall.scrollHeight;
+ }
 </script>
 </body>
 </html>

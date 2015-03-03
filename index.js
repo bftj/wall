@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var expressHbs = require('express3-handlebars');
 var socket = require('./socket.js').socket;
 var socket_send = require('./socket.js').send;
+var onConnection = require('./socket.js').onConnection;
 
 
 var sockets = express();
@@ -32,10 +33,13 @@ router.get('/', function(req, res) {
   res.render('home', {message: message});
 });
 
+var messages = [];
+
 router.post('/', function(req, res) {
   message = req.body;
   res.send('Updated!');
   console.log(message);
+  messages.push(message);
   socket_send(message);
 });
 
@@ -44,3 +48,7 @@ app.use('/', router);
 
 app.listen(1337);
 console.log("It's at port 1337!");
+
+onConnection(function(connection) {
+  socket_send(JSON.stringify(messages));
+});
