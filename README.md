@@ -1,6 +1,6 @@
 Node.js message display
 =======================
 
-`GET /wall/`: display current message with sockjs for live updating
+`GET wall.bftj.co`: display current messages with sockjs for live updating
 
-`POST /wall/`: takes raw post body and pushes out on web socket
+`POST wall.bftj.co`: takes raw post body and pushes out on web socket
