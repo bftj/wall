@@ -33,14 +33,21 @@ router.get('/', function(req, res) {
   res.render('home', {message: message});
 });
 
-var messages = [];
+var points = {'1':0, '2':0, '3':0, '4':0};
 
 router.post('/', function(req, res) {
-  message = req.body;
+  var alternative = req.body;
+  if (alternative in points) {
+    points[alternative]++;
+    socket_send(JSON.stringify(points));
+  }
   res.send('Updated!');
-  console.log(message);
-  messages.push(message);
-  socket_send(message);
+});
+
+router.post('/reset/', function(req, res) {
+  points = {'1':0, '2':0, '3':0, '4':0};
+  socket_send(JSON.stringify(points));
+  res.send('Updated!');
 });
 
 
@@ -50,5 +57,5 @@ app.listen(1337);
 console.log("It's at port 1337!");
 
 onConnection(function(connection) {
-  socket_send(JSON.stringify(messages));
+  socket_send(JSON.stringify(points));
 });
